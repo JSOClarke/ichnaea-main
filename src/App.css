@@ -1,0 +1,18 @@
+.chart-wrapper *:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.app-sidebar {
+  background-color: #95f2d9;
+}
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden; /* Optional: prevents scrollbars if content fits */
+}
