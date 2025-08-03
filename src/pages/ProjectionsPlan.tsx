@@ -4,7 +4,7 @@ import { useExpensesContext } from "../ExpensesContext";
 import { useIncomeContext } from "../IncomeContext";
 import { getCombinedCompoundProjections } from "../utils/projectionsHelpers";
 import ProjectionBreakdown from "../components/projectionSidebar/ProjectionsBreakdown";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import BottomBar from "../projectionsBottomBar/BottomBar";
 export default function ProjectionsPlan() {
   const [yearProjection] = useState<number>(10);
@@ -14,24 +14,31 @@ export default function ProjectionsPlan() {
   const { expenses } = useExpensesContext();
   const { incomes } = useIncomeContext();
 
-  const chartData = getCombinedCompoundProjections(
-    accounts,
-    expenses,
-    incomes,
-    2025,
-    90
-  );
+  const chartData = useMemo(() => {
+    console.log("Recalculating chart data", {
+      accountsLength: accounts.length,
+      expensesLength: expenses.length,
+      incomesLength: incomes.length,
+    });
+    return getCombinedCompoundProjections(
+      accounts,
+      expenses,
+      incomes,
+      2025,
+      70
+    );
+  }, [accounts, expenses, incomes]);
 
   const [yearBreakdown, setYearBreakdown] = useState<number>(chartData[0].year);
 
   // Define landmark years for important financial milestones
   const landmarkYears = [
     {
-      year: 2032,
+      year: 2063,
       label: "Retirement Age",
       color: "orange",
       strokeColor: "white",
-      radius: 8,
+      radius: 12,
     },
     {
       year: 2040,

@@ -85,18 +85,50 @@ export function calculateCompoundInterestWithContributions(
   timesCompounded: number,
   years: number
 ): number {
-  const monthlyRate = annualRate / timesCompounded;
+  // Debug logging to see what parameters we're getting
+  if (years === 40) {
+    console.log("40-year calculation:", {
+      principal,
+      monthlyContribution,
+      annualRate,
+      timesCompounded,
+      years,
+    });
+  }
+
+  // Future Value of Ordinary Annuity + Compound Interest formula
+  // FV = PV(1+r)^n + PMT[((1+r)^n - 1) / r]
+
+  const rate = annualRate / timesCompounded;
   const totalPeriods = timesCompounded * years;
 
-  // Future value of initial principal
-  const principalFV = principal * Math.pow(1 + monthlyRate, totalPeriods);
+  // Future value of initial principal: PV(1+r)^n
+  const principalFV = principal * Math.pow(1 + rate, totalPeriods);
 
-  // Future value of monthly contributions (annuity)
-  const contributionsFV =
-    monthlyContribution *
-    ((Math.pow(1 + monthlyRate, totalPeriods) - 1) / monthlyRate);
+  // Future value of ordinary annuity: PMT[((1+r)^n - 1) / r]
+  // Convert monthly contribution to the compounding period frequency
+  const periodicPayment = monthlyContribution * (12 / timesCompounded);
 
-  return principalFV + contributionsFV;
+  let contributionsFV = 0;
+  if (rate === 0) {
+    // Handle zero interest rate case
+    contributionsFV = periodicPayment * totalPeriods;
+  } else {
+    contributionsFV =
+      periodicPayment * ((Math.pow(1 + rate, totalPeriods) - 1) / rate);
+  }
+
+  const total = principalFV + contributionsFV;
+
+  if (years === 40) {
+    console.log("40-year result:", {
+      principalFV,
+      contributionsFV,
+      total,
+    });
+  }
+
+  return total;
 }
 
 /**
@@ -151,9 +183,14 @@ export function getCombinedCompoundProjections(
   years: number
 ): ChartData[] {
   const chartData: ChartData[] = [];
+  let accumulatedExcess = 0; // Track excess investment over time
 
   for (let i = 0; i <= years; i++) {
     const year = startYear + i;
+
+    if (year === 2025) {
+      console.log("=== 2025 DEBUG ===");
+    }
 
     const chartAccounts: ChartAccount[] = accounts.map((account) => {
       const amount = calculateCompoundInterestWithContributions(
@@ -171,9 +208,7 @@ export function getCombinedCompoundProjections(
       };
     });
 
-    const totalAccountAmount = parseFloat(
-      chartAccounts.reduce((sum, acc) => sum + acc.amount, 0).toFixed(2)
-    );
+    // Note: We'll calculate adjusted account amounts later based on income-funded contributions
 
     // Calculate total income for this year
     const totalIncome = incomes
@@ -190,12 +225,69 @@ export function getCombinedCompoundProjections(
       )
       .reduce((sum, expense) => sum + expense.amount, 0);
 
-    // Calculate net cash flow (income - expenses)
-    const netCashFlow = parseFloat((totalIncome - totalExpenses).toFixed(2));
+    // Calculate total planned monthly contributions across all accounts
+    const totalPlannedContributions =
+      accounts.reduce((sum, account) => sum + account.monthlyContribution, 0) *
+      12;
 
-    // Calculate net worth (account growth + accumulated cash flow)
-    // This represents a more realistic net worth that includes cash flow impact
-    const netWorth = parseFloat((totalAccountAmount + netCashFlow).toFixed(2));
+    // Calculate available income after expenses
+    const availableAfterExpenses = totalIncome - totalExpenses;
+
+    // Determine actual contributions (limited by available income)
+    const actualContributions = Math.min(
+      totalPlannedContributions,
+      Math.max(0, availableAfterExpenses)
+    );
+
+    // Calculate contribution ratio (what percentage of planned contributions can be funded)
+    const contributionRatio =
+      totalPlannedContributions > 0
+        ? actualContributions / totalPlannedContributions
+        : 0;
+
+    // Recalculate account growth with actual (funded) contributions
+    const adjustedChartAccounts: ChartAccount[] = accounts.map((account) => {
+      const adjustedMonthlyContribution =
+        account.monthlyContribution * contributionRatio;
+      const amount = calculateCompoundInterestWithContributions(
+        account.amount,
+        adjustedMonthlyContribution,
+        account.interestRate,
+        account.monthlyRate,
+        i
+      );
+
+      return {
+        accountId: account.id,
+        accountName: account.name,
+        amount: parseFloat(amount.toFixed(2)),
+      };
+    });
+
+    const adjustedTotalAccountAmount = parseFloat(
+      adjustedChartAccounts.reduce((sum, acc) => sum + acc.amount, 0).toFixed(2)
+    );
+
+    // Calculate excess income after funding contributions
+    const excessIncome = Math.max(
+      0,
+      availableAfterExpenses - actualContributions
+    );
+
+    // Add this year's excess to accumulated excess and compound the total
+    accumulatedExcess = accumulatedExcess * 1.05 + excessIncome;
+
+    // Net worth = funded account growth + accumulated compounded excess
+    const netWorth = parseFloat(
+      (adjustedTotalAccountAmount + accumulatedExcess).toFixed(2)
+    );
+
+    // Update chartAccounts to use the adjusted values
+    chartAccounts.length = 0;
+    chartAccounts.push(...adjustedChartAccounts);
+
+    // Calculate net cash flow for reporting (income - expenses)
+    const netCashFlow = parseFloat((totalIncome - totalExpenses).toFixed(2));
 
     // Calculate annual passive income (interest earned in this specific year)
     let totalPassiveIncome = 0;
@@ -241,7 +333,7 @@ export function getCombinedCompoundProjections(
 
     chartData.push({
       year,
-      totalAccountAmount,
+      totalAccountAmount: adjustedTotalAccountAmount,
       totalPassiveIncome,
       totalIncome,
       totalExpenses,
