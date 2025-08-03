@@ -11,7 +11,7 @@ export default function ProjectionDropdown({
   yearData,
 }: ProjectionDropdownProps) {
   const totalAmount = yearData
-    ? `£${yearData.totalAccountAmount.toLocaleString()}`
+    ? `£${yearData.netWorth.toLocaleString()}`
     : undefined;
 
   return (

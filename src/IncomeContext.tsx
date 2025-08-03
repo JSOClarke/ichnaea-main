@@ -33,7 +33,7 @@ const incomeData: Income[] = [
     notes: "Full-time position",
     duration: {
       start: 2025,
-      end: 2065, // Working until 65
+      end: 2067, // Working until 65
     },
   },
   {

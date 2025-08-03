@@ -4,9 +4,17 @@ import { useExpensesContext } from "../ExpensesContext";
 import { useIncomeContext } from "../IncomeContext";
 import { getCombinedCompoundProjections } from "../utils/projectionsHelpers";
 import ProjectionBreakdown from "../components/projectionSidebar/ProjectionsBreakdown";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import BottomBar from "../projectionsBottomBar/BottomBar";
+import Milestone from "../components/milestones/Milestone";
+import type { MilestoneType, YearDropdownItem } from "../../types/types";
 export default function ProjectionsPlan() {
+  const [userYOB, setUserYOB] = useState<number>(2000);
+
+  const retirementAge = 67;
+  const currentYear = 2025;
+  const retirementAgeProjection = userYOB + retirementAge - currentYear;
+  console.log("retirement age projection", retirementAgeProjection);
   const [yearProjection] = useState<number>(10);
   // const [startYear, setStartYear] = useState<number>(2025);
   // const [endYear, endYear] = useState<number>()
@@ -25,16 +33,23 @@ export default function ProjectionsPlan() {
       expenses,
       incomes,
       2025,
-      70
+      retirementAgeProjection
     );
   }, [accounts, expenses, incomes]);
+
+  console.log("chartdata", chartData);
 
   const [yearBreakdown, setYearBreakdown] = useState<number>(chartData[0].year);
 
   // Define landmark years for important financial milestones
-  const landmarkYears = [
+
+  const yearArray = chartData.map((year) => {
+    return year.year;
+  });
+
+  const initialMilestones = [
     {
-      year: 2063,
+      year: 2067,
       label: "Retirement Age",
       color: "orange",
       strokeColor: "white",
@@ -49,6 +64,32 @@ export default function ProjectionsPlan() {
     },
   ];
 
+  const [milestones, setMilestones] =
+    useState<MilestoneType[]>(initialMilestones);
+
+  const [yearsDropdownItems, setYearsDropdownItems] = useState<
+    YearDropdownItem[]
+  >([]);
+
+  useEffect(() => {
+    // Map years to dropdown items
+    const yearItems = yearArray.map((year) => ({
+      label: `Year ${year}`,
+      value: year,
+      type: "year",
+    }));
+
+    // Map milestones to dropdown items
+    const milestoneItems = milestones.map((m) => ({
+      label: m.label,
+      value: m.year,
+      type: "milestone",
+      color: m.color,
+    }));
+
+    // Combine and set
+    setYearsDropdownItems([...yearItems, ...milestoneItems]);
+  }, [milestones]);
   return (
     <div className=" page-container flex flex-col w-full h-full p-8">
       <div className="top-container flex w-full h-[60%] border border-red-500">
@@ -57,7 +98,7 @@ export default function ProjectionsPlan() {
             chartData={chartData}
             setYearBreakdown={setYearBreakdown}
             yearBreakdown={yearBreakdown}
-            landmarkYears={landmarkYears}
+            landmarkYears={milestones}
           />
         </div>
         <div className="flex-1 p-8">
@@ -65,11 +106,19 @@ export default function ProjectionsPlan() {
             // startYear={startYear}
             year={yearBreakdown}
             chartData={chartData}
+            setYearBreakdown={setYearBreakdown}
           />
         </div>
       </div>
       <div className="bottom-container flex flex-1 border border-blue-500">
         <BottomBar />
+      </div>
+      <div className="flex w-full">
+        <Milestone
+          yearArray={yearArray}
+          setMilestones={setMilestones}
+          yearDropdownItems={yearsDropdownItems}
+        />
       </div>
     </div>
   );

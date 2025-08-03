@@ -48,6 +48,7 @@ export default function BottomBar() {
       interestRate: 0.05,
       monthlyRate: 12,
       monthlyContribution: 0,
+      priority: 3,
     };
     setEditingItem(newAccount);
     setEditingType("account");
@@ -169,7 +170,7 @@ export default function BottomBar() {
   };
 
   return (
-    <div className="flex w-full h-full p-8 space-x-8">
+    <div className="flex w-full h-full p-4 space-x-8">
       {/* Income Section */}
       <div className="income-container flex-1">
         <div className="container-title flex items-center justify-center text-xl p-4 bg-green-50 rounded-t-lg border-b">

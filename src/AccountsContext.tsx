@@ -30,9 +30,11 @@ const accountData: Account[] = [
     name: "HYSA Account",
     type: 1,
     amount: 20000,
-    interestRate: 0.035,
+    interestRate: 0.05,
     monthlyRate: 12,
     monthlyContribution: 0,
+    priority: 2,
+    isOverflow: true,
   },
   {
     id: nanoid(),
@@ -42,6 +44,7 @@ const accountData: Account[] = [
     interestRate: 0.05,
     monthlyRate: 12,
     monthlyContribution: 1000,
+    priority: 1,
   },
 ];
 

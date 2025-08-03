@@ -5,6 +5,14 @@ export type AccountTypeOption = {
   label: string;
 };
 
+export type MilestoneType = {
+  year: number;
+  label: string;
+  color: string;
+  strokeColor: string;
+  radius: number;
+};
+
 export const ACCOUNT_TYPE_OPTIONS: AccountTypeOption[] = [
   { id: 1, label: "Savings" },
   { id: 2, label: "Investment" },
@@ -14,11 +22,13 @@ export const ACCOUNT_TYPE_OPTIONS: AccountTypeOption[] = [
 export type Account = {
   id: string;
   name: string;
-  type: AccountTypeId; // Only allowed IDs
+  type: number;
   amount: number;
   interestRate: number;
   monthlyRate: number;
   monthlyContribution: number;
+  priority: number;
+  isOverflow?: boolean; // ✅ Add this line
 };
 
 export type ChartData = {
@@ -36,6 +46,9 @@ export type ChartAccount = {
   accountId: string;
   accountName: string;
   amount: number;
+  fundedMonthlyContribution: number;
+  fundedAnnualContribution: number;
+  fundingPercent: number;
 };
 
 export type Expense = {
@@ -65,4 +78,11 @@ export type Income = {
     start: number;
     end: number;
   };
+};
+
+export type YearDropdownItem = {
+  label: string;
+  value: number;
+  type: string;
+  color?: string;
 };

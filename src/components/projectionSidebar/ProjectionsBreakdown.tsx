@@ -4,19 +4,24 @@ import ProjectionDropdown from "./ProjectionDropdown";
 import { useExpensesContext } from "../../ExpensesContext"; // adjust path as needed
 import ExpensesDropDown from "./ExpensesDropDown";
 import IncomeDropdown from "./IncomeDropdown";
-import PassiveIncomeDropdown from "./PassiveIncomeDropdown";
-import PassiveIncomeChangeDropdown from "./PassiveIncomeChangeDropdown";
+// import PassiveIncomeDropdown from "./PassiveIncomeDropdown";
+// import PassiveIncomeChangeDropdown from "./PassiveIncomeChangeDropdown";
 import { useAccountContext } from "../../AccountsContext";
 import { useIncomeContext } from "../../IncomeContext";
+import ExcessDropdown from "./ExcessDropdown";
+import ActualFundingDropdown from "./ActualFundingDropdown";
+import NetworthDrop from "./NetworthDrop";
 
 interface ProjectionBreakdownProps {
   year: number;
   chartData: ChartData[];
+  setYearBreakdown: (year: number) => void;
 }
 
 export default function ProjectionBreakdown({
   year,
   chartData,
+  setYearBreakdown,
 }: ProjectionBreakdownProps) {
   const { expenses } = useExpensesContext(); // get expenses from context
   const { accounts } = useAccountContext(); // get accounts from context
@@ -38,18 +43,35 @@ export default function ProjectionBreakdown({
     }
   }
 
+  function findYearData(year: number) {
+    if (chartData) {
+      return chartData.find((yearData) => yearData.year === year);
+    }
+  }
+
   return (
     <div className="flex flex-col">
-      <div>Year: {year}</div>
-      <div>
-        NetWorth: £
-        {(
-          totalIncomeAmountFiltered - totalExpensesAmountFiltered
-        ).toLocaleString()}
+      <div className="header flex">
+        <div className="flex flex-1">
+          <select
+            name="year"
+            id="yearSelect"
+            className="w-full"
+            value={year}
+            onChange={(e) => setYearBreakdown(Number(e.target.value))}
+          >
+            {chartData.map((item, idx) => {
+              return (
+                <option key={idx} value={item.year}>
+                  {`Year ${item.year}`}
+                </option>
+              );
+            })}
+          </select>
+        </div>
       </div>
-      <div>Total Income: £{totalIncomeAmountFiltered.toLocaleString()}</div>
-      <div>Total Expenses: £{totalExpensesAmountFiltered.toLocaleString()}</div>
-      <div className="flex flex-col">
+
+      <div className="flex-1 flex-col  overflow-auto">
         {filtered ? (
           <ProjectionDropdown title="Networth" yearData={filtered} />
         ) : (
@@ -63,12 +85,15 @@ export default function ProjectionBreakdown({
         />
         <IncomeDropdown incomes={incomes} year={year} />
         <ExpensesDropDown expenses={expenses} year={year} />
-        <PassiveIncomeDropdown accounts={accounts} year={year} />
+        {/* <PassiveIncomeDropdown accounts={accounts} year={year} />
         <PassiveIncomeChangeDropdown
           title="Change in Passive Income"
           accounts={accounts}
           currentYear={year}
-        />
+        /> */}
+        <ExcessDropdown yearData={findYearData(year)} />
+        <ActualFundingDropdown yearData={findYearData(year)} />
+        <NetworthDrop yearData={findYearData(year)} />
       </div>
     </div>
   );
