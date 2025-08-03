@@ -1,8 +1,8 @@
 import { Trash2 } from "lucide-react";
-import type { Account } from "../../types/types";
+import type { Account, Expense, Income } from "../../types/types";
 
 interface BottomBarCardProps {
-  item: Account;
+  item: Account | Expense | Income;
   onClick: () => void;
   onDelete: (e: React.MouseEvent) => void;
 }
@@ -12,6 +12,8 @@ export default function BottomBarCard({
   onClick,
   onDelete,
 }: BottomBarCardProps) {
+  const hasDuration = 'duration' in item && item.duration;
+
   return (
     <div
       className="flex justify-between items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors group"
@@ -22,10 +24,15 @@ export default function BottomBarCard({
         <div className="text-green-600 font-semibold">
           £{item.amount.toLocaleString()}
         </div>
+        {hasDuration && (
+          <div className="text-sm text-gray-500">
+            {item.duration.start} - {item.duration.end}
+          </div>
+        )}
         <button
           onClick={onDelete}
-          className="opacity-0 group-hover:opacity-100 p-1 text-red-500 hover:text-red-700 hover:bg-red-50 rounded transition-all"
-          title="Delete account"
+          className="p-1 text-red-500 hover:text-red-700 hover:bg-red-50 rounded transition-all"
+          title={`Delete item`}
         >
           <Trash2 size={16} />
         </button>

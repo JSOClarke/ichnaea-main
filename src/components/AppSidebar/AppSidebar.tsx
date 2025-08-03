@@ -5,9 +5,9 @@ interface AppSidebarProps {}
 
 export default function AppSidebar({}) {
   return (
-    <div className="flex bg-white">
+    <div className="flex bg-gray-200 text-black flex items-center justify-center p-2 ">
       <div className="app-sidebar-container flex items-center justify-center">
-        <h2>Menu</h2>
+        <h2 className="px-10">Ichnaea</h2>
       </div>
       <nav
         style={{

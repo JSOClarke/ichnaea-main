@@ -3,6 +3,7 @@ import Dashboard from "./pages/Dashboard";
 import { AccountProvider } from "./AccountsContext";
 import { ExpensesProvider } from "./ExpensesContext";
 import { IncomeProvider } from "./IncomeContext";
+import { ProjectionsProvider } from "./ProjectionsContext";
 import ProjectionsPlan from "./pages/ProjectionsPlan";
 import AppSidebar from "./components/AppSidebar/AppSidebar";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -24,11 +25,13 @@ function App() {
           <IncomeProvider>
             <ExpensesProvider>
               <AccountProvider>
-                <Routes>
-                  <Route path="/" element={<Dashboard />} />
-                  <Route path="/projections" element={<ProjectionsPlan />} />
-                  <Route path="/accounts" element={<Accounts />} />
-                </Routes>
+                <ProjectionsProvider>
+                  <Routes>
+                    <Route path="/" element={<Dashboard />} />
+                    <Route path="/projections" element={<ProjectionsPlan />} />
+                    <Route path="/accounts" element={<Accounts />} />
+                  </Routes>
+                </ProjectionsProvider>
               </AccountProvider>
             </ExpensesProvider>
           </IncomeProvider>

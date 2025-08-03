@@ -9,6 +9,8 @@ import type {
 import { ACCOUNT_TYPE_OPTIONS } from "../../../types/types";
 import FormattedNumberInput from "./FormattedNumberInput";
 
+import { useProjectionsContext } from "../../ProjectionsContext";
+
 interface EditModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -24,6 +26,7 @@ export default function EditModal({
   data,
   type,
 }: EditModalProps) {
+  const { yearDropdownItems } = useProjectionsContext();
   const [formData, setFormData] = useState<any>({});
 
   useEffect(() => {
@@ -208,34 +211,44 @@ export default function EditModal({
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Start Year
                 </label>
-                <input
-                  type="number"
-                  value={formData.duration?.start || 2025}
+                <select
+                  value={formData.duration?.start || new Date().getFullYear()}
                   onChange={(e) =>
                     handleChange("duration", {
                       ...formData.duration,
-                      start: parseInt(e.target.value) || 2025,
+                      start: parseInt(e.target.value),
                     })
                   }
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
+                >
+                  {yearDropdownItems.map((item, idx) => (
+                    <option key={idx} value={item.value}>
+                      {item.label}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   End Year
                 </label>
-                <input
-                  type="number"
-                  value={formData.duration?.end || 2030}
+                <select
+                  value={formData.duration?.end || new Date().getFullYear() + 5}
                   onChange={(e) =>
                     handleChange("duration", {
                       ...formData.duration,
-                      end: parseInt(e.target.value) || 2030,
+                      end: parseInt(e.target.value),
                     })
                   }
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
+                >
+                  {yearDropdownItems.map((item, idx) => (
+                    <option key={idx} value={item.value}>
+                      {item.label}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               <div>
@@ -287,34 +300,47 @@ export default function EditModal({
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Start Year
                 </label>
-                <input
-                  type="number"
-                  value={formData.duration?.start || 2025}
+                .
+                <select
+                  value={formData.duration?.start || new Date().getFullYear()}
                   onChange={(e) =>
                     handleChange("duration", {
                       ...formData.duration,
-                      start: parseInt(e.target.value) || 2025,
+                      start: parseInt(e.target.value),
                     })
                   }
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
+                >
+                  {yearDropdownItems.map((item, idx) => (
+                    <option key={idx} value={item.value}>
+                      {item.label}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   End Year
                 </label>
-                <input
-                  type="number"
-                  value={formData.duration?.end || 2065}
+                <select
+                  value={
+                    formData.duration?.end || new Date().getFullYear() + 40
+                  }
                   onChange={(e) =>
                     handleChange("duration", {
                       ...formData.duration,
-                      end: parseInt(e.target.value) || 2065,
+                      end: parseInt(e.target.value),
                     })
                   }
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
+                >
+                  {yearDropdownItems.map((item, idx) => (
+                    <option key={idx} value={item.value}>
+                      {item.label}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               <div>

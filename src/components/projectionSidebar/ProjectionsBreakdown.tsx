@@ -71,7 +71,7 @@ export default function ProjectionBreakdown({
         </div>
       </div>
 
-      <div className="flex-1 flex-col  overflow-auto">
+      <div className="flex-1 flex-col">
         {filtered ? (
           <ProjectionDropdown title="Networth" yearData={filtered} />
         ) : (

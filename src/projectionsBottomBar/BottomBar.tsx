@@ -178,25 +178,12 @@ export default function BottomBar() {
         </div>
         <div className="space-y-2 p-4 bg-white rounded-b-lg border border-gray-200">
           {incomes.map((item) => (
-            <div
+            <BottomBarCard
               key={item.id}
-              className="flex justify-between items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors group"
+              item={item}
               onClick={() => handleIncomeClick(item)}
-            >
-              <div className="font-medium">{item.name}</div>
-              <div className="flex items-center gap-2">
-                <div className="text-green-600 font-semibold">
-                  £{item.amount.toLocaleString()}
-                </div>
-                <button
-                  onClick={(e) => handleDeleteIncome(item.id, e)}
-                  className="opacity-0 group-hover:opacity-100 p-1 text-red-500 hover:text-red-700 hover:bg-red-50 rounded transition-all"
-                  title="Delete income"
-                >
-                  <Trash2 size={16} />
-                </button>
-              </div>
-            </div>
+              onDelete={(e) => handleDeleteIncome(item.id, e)}
+            />
           ))}
           <button
             onClick={handleAddNewIncome}
@@ -239,25 +226,12 @@ export default function BottomBar() {
         </div>
         <div className="space-y-2 p-4 bg-white rounded-b-lg border border-gray-200">
           {expenses.map((item) => (
-            <div
+            <BottomBarCard
               key={item.id}
-              className="flex justify-between items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors group"
+              item={item}
               onClick={() => handleExpenseClick(item)}
-            >
-              <div className="font-medium">{item.name}</div>
-              <div className="flex items-center gap-2">
-                <div className="text-red-600 font-semibold">
-                  £{item.amount.toLocaleString()}
-                </div>
-                <button
-                  onClick={(e) => handleDeleteExpense(item.id, e)}
-                  className="opacity-0 group-hover:opacity-100 p-1 text-red-500 hover:text-red-700 hover:bg-red-50 rounded transition-all"
-                  title="Delete expense"
-                >
-                  <Trash2 size={16} />
-                </button>
-              </div>
-            </div>
+              onDelete={(e) => handleDeleteExpense(item.id, e)}
+            />
           ))}
           <button
             onClick={handleAddNewExpense}
