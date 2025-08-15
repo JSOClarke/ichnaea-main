@@ -1,13 +1,17 @@
-import { Home, Wallet, Telescope } from "lucide-react";
+import { Home, Wallet, Telescope, Infinity } from "lucide-react";
 import { Link } from "react-router-dom";
 
 interface AppSidebarProps {}
 
 export default function AppSidebar({}) {
   return (
-    <div className="flex bg-gray-200 text-black flex items-center justify-center p-2 ">
+    <div className="flex bg-[#30499f] text-white items-center justify-between  p-2">
       <div className="app-sidebar-container flex items-center justify-center">
-        <h2 className="px-10">Ichnaea</h2>
+        <div className=" flex flex-col items-center">
+          <Infinity />
+          Ichnaea
+        </div>
+        {/* <h2 className=" flex items-center text-[#e27a6d] font-bold "></h2> */}
       </div>
       <nav
         style={{
@@ -17,16 +21,16 @@ export default function AppSidebar({}) {
           paddingLeft: "1rem",
         }}
       >
-        <Link to="/" className="flex gap-2">
-          <Home />
+        <Link to="/" className="flex gap-2 ">
+          {/* <Home /> */}
           Dashboard
         </Link>
         <Link to="/accounts" className="flex gap-2">
-          <Wallet />
+          {/* <Wallet /> */}
           Accounts
         </Link>
         <Link to="/projections" className="flex gap-2">
-          <Telescope />
+          {/* <Telescope /> */}
           Projections
         </Link>
 

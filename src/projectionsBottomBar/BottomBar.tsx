@@ -173,7 +173,7 @@ export default function BottomBar() {
     <div className="flex w-full h-full p-4 space-x-8">
       {/* Income Section */}
       <div className="income-container flex-1">
-        <div className="container-title flex items-center justify-center text-xl p-4 bg-green-50 rounded-t-lg border-b">
+        <div className="container-title flex items-center justify-center text-xl text-white p-4 bg-[#30499f] rounded-t-lg border-b">
           Income
         </div>
         <div className="space-y-2 p-4 bg-white rounded-b-lg border border-gray-200">
@@ -197,7 +197,7 @@ export default function BottomBar() {
 
       {/* Savings/Accounts Section */}
       <div className="savings-container flex-1">
-        <div className="container-title flex items-center justify-center text-xl p-4 bg-blue-50 rounded-t-lg border-b">
+        <div className="container-title flex items-center justify-center text-xl p-4 text-white p-4 bg-[#30499f] rounded-t-lg border-b">
           Savings & Investments
         </div>
         <div className="space-y-2 p-4 bg-white rounded-b-lg border border-gray-200">
@@ -221,7 +221,7 @@ export default function BottomBar() {
 
       {/* Expenses Section */}
       <div className="expenses-container flex-1">
-        <div className="container-title flex items-center justify-center text-xl p-4 bg-red-50 rounded-t-lg border-b">
+        <div className="container-title flex items-center justify-center text-xl p-4 text-white  bg-[#30499f] rounded-t-lg border-b">
           Expenses
         </div>
         <div className="space-y-2 p-4 bg-white rounded-b-lg border border-gray-200">

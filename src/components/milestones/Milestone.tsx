@@ -29,8 +29,8 @@ export default function Milestone({
     setMilestoneYear(yearArray[0]);
   }
   return (
-    <div className="flex items-center justify-center">
-      <div className="flex items-center justify-center">
+    <div className="flex items-center">
+      <div className="flex items-center ">
         <label className="text-sm mr-2">Milestone Name:</label>
         <input
           type="text"
