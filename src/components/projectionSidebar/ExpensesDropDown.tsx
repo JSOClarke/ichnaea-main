@@ -1,5 +1,6 @@
 import type { Expense } from "../../../types/types";
 import { DropdownItem, UniversalDropdown } from "../ui/UniversalDropdown";
+import { toAnnualAmount } from "../../utils/projectionsHelpers";
 
 interface ExpensesDropDownProps {
   expenses: Expense[];
@@ -15,9 +16,9 @@ export default function ExpensesDropDown({
     (expense) => expense.duration.start <= year && expense.duration.end >= year
   );
 
-  // Calculate total for only active expenses
+  // Calculate total for only active expenses (converted to annual)
   const totalExpenses = activeExpenses.reduce((curr, exp) => {
-    return curr + exp.amount;
+    return curr + toAnnualAmount(exp.amount, exp.frequency);
   }, 0);
 
   return (
@@ -28,11 +29,15 @@ export default function ExpensesDropDown({
         totalAmount={`£${totalExpenses.toLocaleString()}`}
       >
         {activeExpenses.map((expense, idx) => {
+          const annualAmount = toAnnualAmount(
+            expense.amount,
+            expense.frequency
+          );
           return (
             <DropdownItem
               key={expense.id}
               label={expense.name}
-              value={`£${expense.amount.toLocaleString()}`}
+              value={`£${annualAmount.toLocaleString()}`}
             />
           );
         })}

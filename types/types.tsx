@@ -11,6 +11,8 @@ export type MilestoneType = {
   color: string;
   strokeColor: string;
   radius: number;
+  isConditional?: boolean;
+  targetAmount?: number;
 };
 
 export const ACCOUNT_TYPE_OPTIONS: AccountTypeOption[] = [
@@ -54,7 +56,8 @@ export type ChartAccount = {
 export type Expense = {
   id: string;
   name: string;
-  amount: number; // in minor units like pence
+  amount: number; // Amount in the specified frequency
+  frequency: "monthly" | "annually";
   category: string;
   type?: "Fixed" | "Variable";
   accountId?: string;
@@ -69,7 +72,8 @@ export type Expense = {
 export type Income = {
   id: string;
   name: string;
-  amount: number; // Annual amount
+  amount: number; // Amount in the specified frequency
+  frequency: "monthly" | "annually";
   category: string;
   type?: "Salary" | "Side Gig" | "Investment" | "Other";
   notes?: string;

@@ -48,7 +48,7 @@ const UniversalDropdown: React.FC<UniversalDropdownProps> = ({
         aria-controls="dropdown-content"
       >
         <div className="flex items-center justify-between w-full">
-          <span className="font-bold text-sm text-gray-900 select-none">
+          <span className="font-bold text-base text-gray-900 select-none">
             {title}
           </span>
           <div className="flex items-center gap-2 text-sm">

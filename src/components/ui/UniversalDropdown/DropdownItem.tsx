@@ -10,8 +10,8 @@ const DropdownItem: React.FC<DropdownItemProps> = ({
 }) => {
   const baseItemClasses =
     "flex flex-row gap-2 justify-between py-1 px-1 rounded-sm hover:bg-gray-50 transition-colors duration-150";
-  const baseLabelClasses = "font-bold text-gray-900";
-  const baseValueClasses = "font-bold text-gray-700";
+  const baseLabelClasses = "font-medium text-sm text-gray-900";
+  const baseValueClasses = "font-medium text-sm text-gray-700";
 
   return (
     <div className={`${baseItemClasses} ${className}`}>

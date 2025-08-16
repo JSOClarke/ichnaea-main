@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Milestone from "./milestones/Milestone";
-import type { ChartData } from "../../types/types";
+import type { ChartData, YearDropdownItem } from "../../types/types";
 import ConditionalMilestone from "./milestones/ConditionalMilestone";
 
 interface TopBarRibbonProps {
@@ -32,43 +32,41 @@ export default function TopBarRibbon({
   };
 
   return (
-    <div className="flex gap-4 min-h-8">
-      <select
-        name="seletors"
-        id="selectors"
-        onChange={handleSelectorChange}
-        value={milestoneSelected}
-      >
-        {selectors.map((opt) => {
-          return (
-            <option key={opt.value} value={opt.value}>
-              {opt.label}
-            </option>
-          );
-        })}
-      </select>
-      {/* <button className="bg-[#30499f] text-white px-4 py-2 rounded-xl">
-        Milestones
-      </button> */}
-      <div>
-        {milestoneSelected === "yearMilestone" ? (
+    <div className="flex items-center gap-4 p-4 bg-gray-50 border-b border-gray-200">
+      <div className="flex items-center gap-2">
+        <label className="text-sm font-medium text-gray-700">Type:</label>
+        <select
+          name="selectors"
+          id="selectors"
+          onChange={handleSelectorChange}
+          value={milestoneSelected}
+          className="px-3 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        >
+          {selectors.map((opt) => {
+            return (
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
+              </option>
+            );
+          })}
+        </select>
+      </div>
+
+      <div className="flex-1 min-w-0 h-10 flex items-center">
+        {milestoneSelected === "yearMilestone" && (
           <Milestone
             yearArray={yearArray}
             setMilestones={setMilestones}
             yearDropdownItems={yearDropdownItems}
           />
-        ) : null}
-      </div>
-      <div>
-        {" "}
-        {milestoneSelected === "conditionalMilestone" ? (
+        )}
+
+        {milestoneSelected === "conditionalMilestone" && (
           <ConditionalMilestone
-            yearArray={yearArray}
             setMilestones={setMilestones}
-            yearDropdownItems={yearDropdownItems}
             chartData={chartData}
           />
-        ) : null}
+        )}
       </div>
     </div>
   );

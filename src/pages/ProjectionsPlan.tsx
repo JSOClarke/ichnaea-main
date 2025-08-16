@@ -18,8 +18,9 @@ export default function ProjectionsPlan() {
     [chartData]
   );
   return (
-    <div className=" page-container bg-[#f1f4f9] flex flex-col w-full h-full p-4 overflow-y-auto">
-      <div className="mb-4 bg-white p-2 flex rounded-xl">
+    <div className="page-container bg-[#f1f4f9] flex flex-col w-full h-screen p-4 gap-4">
+      {/* Top Ribbon - Fixed height */}
+      <div className="bg-white rounded-xl flex-shrink-0">
         <TopBarRibbon
           yearArray={yearArray}
           setMilestones={setMilestones}
@@ -27,35 +28,33 @@ export default function ProjectionsPlan() {
           chartData={chartData}
         />
       </div>
-      {/* <div className="mb-4 bg-white p-2 flex rounded-xl ">
-        <Milestone
-          yearArray={yearArray}
-          setMilestones={setMilestones}
-          yearDropdownItems={yearDropdownItems}
-        />
-      </div> */}
-      <div className="top-container flex w-full h-[80%]  p-4 bg-white rounded-xl max-h-110">
-        <div className="w-4/5 h-full outline-none shadow-none">
-          <MoneyProjectionChart
-            chartData={chartData}
-            setYearBreakdown={setYearBreakdown}
-            yearBreakdown={yearBreakdown}
-            landmarkYears={milestones}
-          />
-        </div>
-        <div className=" sidebar flex-1  mb-8 p-4 max-h-100 min-w-100 overflow-y-auto">
-          <ProjectionBreakdown
-            // startYear={startYear}
-            year={yearBreakdown}
-            chartData={chartData}
-            setYearBreakdown={setYearBreakdown}
-          />
+
+      {/* Main Content Area - Takes remaining space */}
+      <div className="flex flex-1 gap-4 min-h-0">
+        {/* Chart and Sidebar Container */}
+        <div className="flex flex-1 bg-white rounded-xl p-4 min-h-0">
+          <div className="w-4/5 h-full">
+            <MoneyProjectionChart
+              chartData={chartData}
+              setYearBreakdown={setYearBreakdown}
+              yearBreakdown={yearBreakdown}
+              landmarkYears={milestones}
+            />
+          </div>
+          <div className="flex-1 p-4 overflow-y-auto min-w-0">
+            <ProjectionBreakdown
+              year={yearBreakdown}
+              chartData={chartData}
+              setYearBreakdown={setYearBreakdown}
+            />
+          </div>
         </div>
       </div>
-      <div className="bottom-container flex flex-1 bg-white mt-4 rounded-xl">
+
+      {/* Bottom Bar - Flexible height but constrained */}
+      <div className="bg-white rounded-xl flex-shrink-0 min-h-[300px] max-h-[400px]">
         <BottomBar />
       </div>
-      <div className="flex w-full"></div>
     </div>
   );
 }

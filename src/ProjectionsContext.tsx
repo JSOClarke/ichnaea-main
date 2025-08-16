@@ -64,6 +64,24 @@ export const ProjectionsProvider = ({ children }: { children: ReactNode }) => {
     YearDropdownItem[]
   >([]);
 
+  // Update conditional milestones when chartData changes
+  useEffect(() => {
+    setMilestones((prevMilestones) => {
+      return prevMilestones.map((milestone) => {
+        if (milestone.isConditional && milestone.targetAmount) {
+          // Recalculate the year for conditional milestones
+          const updatedYear = chartData.find(
+            (entry) => entry.netWorth >= milestone.targetAmount!
+          );
+          if (updatedYear) {
+            return { ...milestone, year: updatedYear.year };
+          }
+        }
+        return milestone;
+      });
+    });
+  }, [chartData]);
+
   useEffect(() => {
     const yearItems = yearArray.map((year) => ({
       label: `Year ${year}`,

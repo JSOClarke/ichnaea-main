@@ -28,6 +28,7 @@ const incomeData: Income[] = [
     id: nanoid(),
     name: "Semi Relaxed Job",
     amount: 14000,
+    frequency: "annually",
     category: "Employment",
     type: "Salary",
     notes: "Full-time position",

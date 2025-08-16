@@ -25,6 +25,7 @@ const initialExpenses: Expense[] = [
     id: nanoid(),
     name: "Living Expenses",
     amount: 10000,
+    frequency: "annually",
     category: "Living Expenses",
     type: "Variable",
     accountId: undefined,

@@ -1,5 +1,6 @@
 import type { Income } from "../../../types/types";
 import { DropdownItem, UniversalDropdown } from "../ui/UniversalDropdown";
+import { toAnnualAmount } from "../../utils/projectionsHelpers";
 
 interface IncomeDropdownProps {
   incomes: Income[];
@@ -12,9 +13,9 @@ export default function IncomeDropdown({ incomes, year }: IncomeDropdownProps) {
     (income) => income.duration.start <= year && income.duration.end >= year
   );
 
-  // Calculate total for only active incomes
+  // Calculate total for only active incomes (converted to annual)
   const totalIncome = activeIncomes.reduce((curr, income) => {
-    return curr + income.amount;
+    return curr + toAnnualAmount(income.amount, income.frequency);
   }, 0);
 
   return (
@@ -24,11 +25,12 @@ export default function IncomeDropdown({ incomes, year }: IncomeDropdownProps) {
       totalAmount={`£${totalIncome.toLocaleString()}`}
     >
       {activeIncomes.map((income) => {
+        const annualAmount = toAnnualAmount(income.amount, income.frequency);
         return (
           <DropdownItem
             key={income.id}
             label={income.name}
-            value={`£${income.amount.toLocaleString()}`}
+            value={`£${annualAmount.toLocaleString()}`}
             valueClassName="text-green-600"
           />
         );

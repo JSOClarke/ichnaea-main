@@ -49,13 +49,28 @@ function calculatePassiveIncomeOnly(
   return round(totalFutureValue - totalContributions);
 }
 
+// Helper function to convert any amount to annual
+export function toAnnualAmount(
+  amount: number,
+  frequency: "monthly" | "annually"
+): number {
+  return frequency === "monthly" ? amount * 12 : amount;
+}
+
 function sumForYear(
-  items: { duration: { start: number; end: number }; amount: number }[],
+  items: {
+    duration: { start: number; end: number };
+    amount: number;
+    frequency: "monthly" | "annually";
+  }[],
   year: number
 ): number {
   return items
     .filter((item) => item.duration.start <= year && item.duration.end >= year)
-    .reduce((sum, item) => sum + item.amount, 0);
+    .reduce(
+      (sum, item) => sum + toAnnualAmount(item.amount, item.frequency),
+      0
+    );
 }
 
 function calculateTotalPassiveIncome(

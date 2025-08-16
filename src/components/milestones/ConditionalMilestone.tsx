@@ -1,41 +1,34 @@
 import { useState } from "react";
-import type {
-  ChartData,
-  MilestoneType,
-  YearDropdownItem,
-} from "../../../types/types";
+import type { ChartData, MilestoneType } from "../../../types/types";
 import FormattedNumberInput from "../ui/FormattedNumberInput";
 
 interface ConditionalMilestoneProps {
-  yearArray: number[];
-  setMilestones: (milestones: any) => void;
-  yearDropdownItems: YearDropdownItem[];
+  setMilestones: (
+    milestones: (prev: MilestoneType[]) => MilestoneType[]
+  ) => void;
   chartData: ChartData[];
 }
 
 export default function ConditionalMilestone({
-  yearArray,
   setMilestones,
-  yearDropdownItems,
   chartData,
 }: ConditionalMilestoneProps) {
-  const [milestoneAmount, setMilestoneAmount] = useState<number>();
-  const [milestoneTitle, setMilestoneTitle] = useState<string>();
-  const [isOpen, setIsOpen] = useState<boolean>(true);
+  const [milestoneAmount, setMilestoneAmount] = useState<number>(0);
+  const [milestoneTitle, setMilestoneTitle] = useState<string>("");
 
   function findConditionalMilestone(amount: number) {
     if (!amount) {
       return null;
     }
     const conditonalMilestoneYear = chartData.find(
-      (entry) => entry.netWorth >= 100000
+      (entry) => entry.netWorth >= amount
     );
     console.log("conditional milestone data", conditonalMilestoneYear);
     return conditonalMilestoneYear;
   }
 
   function handleMilestoneAdd() {
-    if (!milestoneAmount) {
+    if (!milestoneAmount || !milestoneTitle.trim()) {
       return null;
     }
 
@@ -49,44 +42,47 @@ export default function ConditionalMilestone({
       color: "red",
       strokeColor: "white",
       radius: 8,
+      isConditional: true,
+      targetAmount: milestoneAmount,
     };
     setMilestones((prev) => [...prev, newMilestones]);
     setMilestoneTitle("");
-    setMilestoneAmount("");
+    setMilestoneAmount(0);
   }
   return (
-    <div className="flex items-center">
-      <div className="flex items-center ">
-        <label className="text-sm mr-2">Milestone Name:</label>
+    <div className="flex items-center gap-4">
+      <div className="flex items-center gap-2">
+        <label className="text-sm font-medium text-gray-700 whitespace-nowrap">
+          Name:
+        </label>
         <input
           type="text"
           value={milestoneTitle}
-          className="border border-red-200 mr-2"
+          placeholder="e.g., First 100K"
+          className="px-3 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-32"
           onChange={(e) => setMilestoneTitle(e.target.value)}
         />
       </div>
-      <div className="flex items-center justify-center px-2">
-        <label className="text-sm mr-2">Milestone Amount:</label>
-        <input
-          type="number"
+
+      <div className="flex items-center gap-2">
+        <label className="text-sm font-medium text-gray-700 whitespace-nowrap">
+          Amount:
+        </label>
+        <FormattedNumberInput
           value={milestoneAmount}
-          className="border border-red-200 mr-2"
-          onChange={(e) => setMilestoneAmount(Number(e.target.value))}
-        />{" "}
+          onChange={setMilestoneAmount}
+          placeholder="100,000"
+          className="px-3 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-32"
+        />
       </div>
-      <div>
-        <button
-          onClick={() => handleMilestoneAdd()}
-          className="bg-blue-300 text-white p-1 text-sm rounded-xl flex items-center justify-center hover:bg-blue-900"
-        >
-          {" "}
-          Add Milestone
-        </button>
-      </div>
-      {/* <div className="flex">
-        <label>Color</label>
-        <input type="text" className="border border-red-200" />
-      </div> */}
+
+      <button
+        onClick={handleMilestoneAdd}
+        disabled={!milestoneAmount || !milestoneTitle.trim()}
+        className="px-4 py-1 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+      >
+        Add Milestone
+      </button>
     </div>
   );
 }

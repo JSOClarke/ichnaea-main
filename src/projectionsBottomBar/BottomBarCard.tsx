@@ -12,7 +12,7 @@ export default function BottomBarCard({
   onClick,
   onDelete,
 }: BottomBarCardProps) {
-  const hasDuration = 'duration' in item && item.duration;
+  const hasDuration = "duration" in item && item.duration;
 
   return (
     <div
@@ -23,6 +23,11 @@ export default function BottomBarCard({
       <div className="flex items-center gap-2">
         <div className="text-green-600 font-semibold">
           £{item.amount.toLocaleString()}
+          {"frequency" in item && (
+            <span className="text-xs text-gray-500 ml-1">
+              /{item.frequency === "monthly" ? "mo" : "yr"}
+            </span>
+          )}
         </div>
         {hasDuration && (
           <div className="text-sm text-gray-500">
