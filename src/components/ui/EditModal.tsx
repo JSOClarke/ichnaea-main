@@ -192,6 +192,54 @@ export default function EditModal({
                   <option value={365}>Daily</option>
                 </select>
               </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Funding Priority
+                </label>
+                <select
+                  value={formData.priority || 1}
+                  onChange={(e) =>
+                    handleChange("priority", parseInt(e.target.value))
+                  }
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value={1}>1 - Highest (funded first)</option>
+                  <option value={2}>2 - Medium</option>
+                  <option value={3}>3 - Low</option>
+                  <option value={4}>4 - Lowest (funded last)</option>
+                </select>
+                <p className="text-xs text-gray-500 mt-1">
+                  When you have extra money, accounts with priority 1 get funded
+                  first
+                </p>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Withdrawal Priority
+                </label>
+                <select
+                  value={formData.withdrawalPriority || 1}
+                  onChange={(e) =>
+                    handleChange("withdrawalPriority", parseInt(e.target.value))
+                  }
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value={1}>
+                    1 - First to withdraw (least protected)
+                  </option>
+                  <option value={2}>2 - Second to withdraw</option>
+                  <option value={3}>3 - Third to withdraw</option>
+                  <option value={4}>
+                    4 - Last to withdraw (most protected)
+                  </option>
+                </select>
+                <p className="text-xs text-gray-500 mt-1">
+                  When expenses exceed income, accounts with priority 1 get
+                  consumed first
+                </p>
+              </div>
             </>
           )}
 

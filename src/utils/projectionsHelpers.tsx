@@ -92,13 +92,15 @@ function calculateTotalPassiveIncome(
 
 function allocateFundsByPriority(
   accounts: Account[],
-  availableAnnualCash: number
+  availableAnnualCash: number,
+  currentAccountBalances: { [accountId: string]: number } = {}
 ): {
   accountId: string;
   accountName: string;
   actualMonthlyContribution: number;
   annualFundedAmount: number;
   fundingPercent: number;
+  savingsWithdrawn: number;
   original: Account;
 }[] {
   const sorted = [...accounts].sort((a, b) => a.priority - b.priority);
@@ -107,40 +109,87 @@ function allocateFundsByPriority(
 
   let overflowAccount: Account | null = null;
 
-  for (const acc of sorted) {
-    if ((acc as any).isOverflow) {
-      overflowAccount = acc;
-      continue;
+  // Handle positive cash flow (funding accounts)
+  if (availableAnnualCash >= 0) {
+    for (const acc of sorted) {
+      if ((acc as any).isOverflow) {
+        overflowAccount = acc;
+        continue;
+      }
+
+      const annualTarget = acc.monthlyContribution * 12;
+      const annualFunded = Math.min(annualTarget, remainingCash);
+      const fundingPercent = annualTarget > 0 ? annualFunded / annualTarget : 0;
+      const monthlyFunded = annualFunded / 12;
+
+      remainingCash -= annualFunded;
+
+      results.push({
+        accountId: acc.id,
+        accountName: acc.name,
+        actualMonthlyContribution: monthlyFunded,
+        annualFundedAmount: annualFunded,
+        fundingPercent,
+        savingsWithdrawn: 0,
+        original: acc,
+      });
     }
 
-    const annualTarget = acc.monthlyContribution * 12;
-    const annualFunded = Math.min(annualTarget, remainingCash);
-    const fundingPercent = annualTarget > 0 ? annualFunded / annualTarget : 0;
-    const monthlyFunded = annualFunded / 12;
+    // Handle overflow account
+    if (overflowAccount) {
+      const remainingForOverflow = Math.max(0, remainingCash);
+      results.push({
+        accountId: overflowAccount.id,
+        accountName: overflowAccount.name,
+        actualMonthlyContribution: remainingForOverflow / 12,
+        annualFundedAmount: remainingForOverflow,
+        fundingPercent: remainingForOverflow > 0 ? 1 : 0,
+        savingsWithdrawn: 0,
+        original: overflowAccount,
+      });
+    }
+  } else {
+    // Handle negative cash flow (consuming savings by withdrawal priority)
+    let shortfall = Math.abs(availableAnnualCash);
 
-    remainingCash -= annualFunded;
+    // Sort by withdrawal priority for consumption (lower withdrawalPriority = consumed first)
+    // Include ALL accounts in withdrawal logic - excess money needs to be tracked somewhere
+    const withdrawalSorted = [...accounts].sort(
+      (a, b) => (a.withdrawalPriority || 1) - (b.withdrawalPriority || 1)
+    );
 
-    results.push({
-      accountId: acc.id,
-      accountName: acc.name,
-      actualMonthlyContribution: monthlyFunded,
-      annualFundedAmount: annualFunded,
-      fundingPercent,
-      original: acc,
-    });
-  }
+    // Debug: Log withdrawal order
+    console.log(
+      "Withdrawal order:",
+      withdrawalSorted.map((acc) => ({
+        name: acc.name,
+        withdrawalPriority: acc.withdrawalPriority || 1,
+        balance: currentAccountBalances[acc.id] || acc.amount,
+      }))
+    );
 
-  // Always add overflow account, even with 0 funding
-  if (overflowAccount) {
-    const remainingForOverflow = Math.max(0, remainingCash);
-    results.push({
-      accountId: overflowAccount.id,
-      accountName: overflowAccount.name,
-      actualMonthlyContribution: remainingForOverflow / 12,
-      annualFundedAmount: remainingForOverflow,
-      fundingPercent: remainingForOverflow > 0 ? 1 : 0,
-      original: overflowAccount,
-    });
+    // Process withdrawals in withdrawal priority order
+    for (const acc of withdrawalSorted) {
+      const currentBalance = currentAccountBalances[acc.id] || acc.amount;
+      let withdrawn = 0;
+
+      // Consume from this account if there's still a shortfall
+      if (shortfall > 0) {
+        const maxWithdrawal = Math.min(shortfall, currentBalance);
+        withdrawn = maxWithdrawal;
+        shortfall -= withdrawn;
+      }
+
+      results.push({
+        accountId: acc.id,
+        accountName: acc.name,
+        actualMonthlyContribution: -withdrawn / 12, // Negative contribution = withdrawal
+        annualFundedAmount: -withdrawn,
+        fundingPercent: 0,
+        savingsWithdrawn: withdrawn,
+        original: acc,
+      });
+    }
   }
 
   return results;
@@ -156,32 +205,58 @@ export function getCombinedCompoundProjections(
   const chartData: ChartData[] = [];
   let accumulatedExcess = 0;
 
+  // Track current account balances over time
+  let currentAccountBalances: { [accountId: string]: number } = {};
+
+  // Initialize account balances
+  accounts.forEach((acc) => {
+    currentAccountBalances[acc.id] = acc.amount;
+  });
+
   for (let i = 0; i <= years; i++) {
     const year = startYear + i;
 
     const totalIncome = sumForYear(incomes, year);
     const totalExpenses = sumForYear(expenses, year);
-    const availableCash = Math.max(0, totalIncome - totalExpenses);
+    const netCashFlow = totalIncome - totalExpenses; // Allow negative values
 
-    const fundingAllocations = allocateFundsByPriority(accounts, availableCash);
+    const fundingAllocations = allocateFundsByPriority(
+      accounts,
+      netCashFlow,
+      currentAccountBalances
+    );
 
     const adjustedChartAccounts: ChartAccount[] = fundingAllocations.map(
       (f) => {
-        const amount = calculateCompoundInterestWithContributions(
-          f.original.amount,
-          f.actualMonthlyContribution,
-          f.original.interestRate,
-          f.original.monthlyRate,
-          i
-        );
+        // Calculate the new balance after contributions/withdrawals
+        const previousBalance =
+          currentAccountBalances[f.accountId] || f.original.amount;
+
+        // For year 0, start with original amount, then apply growth and contributions
+        let newAmount;
+        if (i === 0) {
+          newAmount = previousBalance + f.actualMonthlyContribution * 12;
+        } else {
+          // Apply compound growth to previous balance, then add/subtract contributions
+          const grownBalance =
+            previousBalance * Math.pow(1 + f.original.interestRate, 1);
+          newAmount = grownBalance + f.actualMonthlyContribution * 12;
+        }
+
+        // Ensure balance doesn't go negative
+        newAmount = Math.max(0, newAmount);
+
+        // Update the tracked balance
+        currentAccountBalances[f.accountId] = newAmount;
 
         return {
           accountId: f.accountId,
           accountName: f.accountName,
-          amount: round(amount),
+          amount: round(newAmount),
           fundedMonthlyContribution: round(f.actualMonthlyContribution),
           fundedAnnualContribution: round(f.annualFundedAmount),
           fundingPercent: round(f.fundingPercent),
+          savingsWithdrawn: round(f.savingsWithdrawn || 0),
         };
       }
     );
@@ -190,16 +265,32 @@ export function getCombinedCompoundProjections(
       adjustedChartAccounts.reduce((sum, acc) => sum + acc.amount, 0)
     );
 
-    const totalFunded = fundingAllocations.reduce(
-      (sum, f) => sum + f.annualFundedAmount,
-      0
-    );
-    const unusedCash = availableCash - totalFunded;
+    // Handle excess cash differently for positive vs negative cash flow
+    if (netCashFlow >= 0) {
+      const totalFunded = fundingAllocations.reduce(
+        (sum, f) => sum + Math.max(0, f.annualFundedAmount), // Only count positive funding
+        0
+      );
+      const unusedCash = Math.max(0, netCashFlow - totalFunded);
+      accumulatedExcess = accumulatedExcess * 1.05 + unusedCash;
+    } else {
+      // For negative cash flow, excess cash might be consumed
+      const totalWithdrawn = fundingAllocations.reduce(
+        (sum, f) => sum + f.savingsWithdrawn,
+        0
+      );
 
-    accumulatedExcess = accumulatedExcess * 1.05 + unusedCash;
+      // If withdrawals don't cover the shortfall, consume excess cash
+      const remainingShortfall = Math.abs(netCashFlow) - totalWithdrawn;
+      if (remainingShortfall > 0) {
+        accumulatedExcess = Math.max(0, accumulatedExcess - remainingShortfall);
+      }
+
+      // Apply growth to remaining excess
+      accumulatedExcess = accumulatedExcess * 1.05;
+    }
 
     const netWorth = round(adjustedTotalAccountAmount + accumulatedExcess);
-    const netCashFlow = round(totalIncome - totalExpenses);
 
     const totalPassiveIncome =
       i === 0
@@ -215,7 +306,7 @@ export function getCombinedCompoundProjections(
       totalPassiveIncome,
       totalIncome,
       totalExpenses,
-      netCashFlow,
+      netCashFlow: round(netCashFlow),
       netWorth,
       chartAccounts: adjustedChartAccounts,
     });

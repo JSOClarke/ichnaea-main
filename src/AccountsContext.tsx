@@ -34,7 +34,8 @@ const accountData: Account[] = [
     monthlyRate: 12,
     monthlyContribution: 0,
     priority: 2,
-    isOverflow: true,
+    withdrawalPriority: 2, // Second to be consumed
+    isOverflow: true, // Back to being overflow account - excess funds go here
   },
   {
     id: nanoid(),
@@ -45,6 +46,7 @@ const accountData: Account[] = [
     monthlyRate: 12,
     monthlyContribution: 1000,
     priority: 1,
+    withdrawalPriority: 1, // First to be consumed (least protected)
   },
   {
     id: nanoid(),
@@ -55,6 +57,7 @@ const accountData: Account[] = [
     monthlyRate: 12,
     monthlyContribution: 0,
     priority: 3,
+    withdrawalPriority: 4, // Last to be consumed (most protected)
     isOverflow: false,
   },
 ];

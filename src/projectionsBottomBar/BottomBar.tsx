@@ -49,6 +49,7 @@ export default function BottomBar() {
       monthlyRate: 12,
       monthlyContribution: 0,
       priority: 3,
+      withdrawalPriority: 2, // Default to medium withdrawal priority
     };
     setEditingItem(newAccount);
     setEditingType("account");

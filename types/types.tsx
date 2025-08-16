@@ -30,6 +30,7 @@ export type Account = {
   monthlyRate: number;
   monthlyContribution: number;
   priority: number;
+  withdrawalPriority?: number;
   isOverflow?: boolean; // ✅ Add this line
 };
 
@@ -51,6 +52,7 @@ export type ChartAccount = {
   fundedMonthlyContribution: number;
   fundedAnnualContribution: number;
   fundingPercent: number;
+  savingsWithdrawn?: number;
 };
 
 export type Expense = {
