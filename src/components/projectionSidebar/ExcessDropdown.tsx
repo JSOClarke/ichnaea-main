@@ -17,9 +17,9 @@ export default function ExcessDropdown({ yearData }: ExcessDropdown) {
       <UniversalDropdown
         title="Excess"
         defaultOpen={false}
-        totalAmount={yearExcess}
+        totalAmount={`£${yearExcess}`}
       >
-        <DropdownItem label="Total Excess" value={yearExcess} />
+        <DropdownItem label="Total Excess" value={`£${yearExcess}`} />
       </UniversalDropdown>
     </div>
   );

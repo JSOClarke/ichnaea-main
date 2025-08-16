@@ -46,6 +46,17 @@ const accountData: Account[] = [
     monthlyContribution: 1000,
     priority: 1,
   },
+  {
+    id: nanoid(),
+    name: "Pension",
+    type: 2,
+    amount: 10000,
+    interestRate: 0.05,
+    monthlyRate: 12,
+    monthlyContribution: 0,
+    priority: 3,
+    isOverflow: false,
+  },
 ];
 
 // Provider component

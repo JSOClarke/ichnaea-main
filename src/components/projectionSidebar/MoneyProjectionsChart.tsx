@@ -173,12 +173,12 @@ export default function MoneyProjectionChart({
                 activeDot={false}
               />
 
-              <ReferenceLine
+              {/* <ReferenceLine
                 x={2028}
                 stroke="red"
                 strokeDasharray="3 3"
                 label={{ value: "2028", position: "top", fill: "red" }}
-              />
+              /> */}
               <ReferenceLine
                 x={yearBreakdown}
                 stroke="black"
@@ -239,13 +239,13 @@ export default function MoneyProjectionChart({
                 }}
                 style={{ cursor: "pointer" }}
               />
-
+              {/* 
               <ReferenceLine
                 x={2028}
                 stroke="red"
                 strokeDasharray="3 3"
                 label={{ value: "2028", position: "top", fill: "red" }}
-              />
+              /> */}
               <ReferenceLine
                 x={yearBreakdown}
                 stroke="black"

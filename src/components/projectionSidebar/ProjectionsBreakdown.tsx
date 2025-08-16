@@ -93,7 +93,7 @@ export default function ProjectionBreakdown({
         /> */}
         <ExcessDropdown yearData={findYearData(year)} />
         <ActualFundingDropdown yearData={findYearData(year)} />
-        <NetworthDrop yearData={findYearData(year)} />
+        {/* <NetworthDrop yearData={findYearData(year)} /> */}
       </div>
     </div>
   );

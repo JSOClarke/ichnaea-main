@@ -26,26 +26,14 @@ interface IncomeProviderProps {
 const incomeData: Income[] = [
   {
     id: nanoid(),
-    name: "Software Engineer Salary",
-    amount: 75000,
+    name: "Semi Relaxed Job",
+    amount: 14000,
     category: "Employment",
     type: "Salary",
     notes: "Full-time position",
     duration: {
       start: 2025,
       end: 2067, // Working until 65
-    },
-  },
-  {
-    id: nanoid(),
-    name: "Freelance Projects",
-    amount: 15000,
-    category: "Self-Employment",
-    type: "Side Gig",
-    notes: "Weekend consulting",
-    duration: {
-      start: 2025,
-      end: 2035, // Side gig for 10 years
     },
   },
 ];

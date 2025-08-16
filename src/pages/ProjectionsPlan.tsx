@@ -12,7 +12,7 @@ export default function ProjectionsPlan() {
   const [yearBreakdown, setYearBreakdown] = useState<number>(
     chartData[0]?.year
   );
-  console.log("yearbreakdown", yearBreakdown);
+  console.log("chartData", chartData);
   const yearArray = useMemo(
     () => chartData.map((year) => year.year),
     [chartData]
@@ -24,6 +24,7 @@ export default function ProjectionsPlan() {
           yearArray={yearArray}
           setMilestones={setMilestones}
           yearDropdownItems={yearDropdownItems}
+          chartData={chartData}
         />
       </div>
       {/* <div className="mb-4 bg-white p-2 flex rounded-xl ">
@@ -33,7 +34,7 @@ export default function ProjectionsPlan() {
           yearDropdownItems={yearDropdownItems}
         />
       </div> */}
-      <div className="top-container flex w-full h-[80%]  p-4 bg-white rounded-xl">
+      <div className="top-container flex w-full h-[80%]  p-4 bg-white rounded-xl max-h-110">
         <div className="w-4/5 h-full outline-none shadow-none">
           <MoneyProjectionChart
             chartData={chartData}

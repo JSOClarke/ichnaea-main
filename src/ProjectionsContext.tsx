@@ -1,5 +1,11 @@
-
-import React, { createContext, useState, useMemo, useContext, ReactNode, useEffect } from "react";
+import React, {
+  createContext,
+  useState,
+  useMemo,
+  useContext,
+  ReactNode,
+  useEffect,
+} from "react";
 import type { MilestoneType, YearDropdownItem } from "../types/types";
 import { useAccountContext } from "./AccountsContext";
 import { useExpensesContext } from "./ExpensesContext";
@@ -13,7 +19,9 @@ interface ProjectionsContextType {
   chartData: any[]; // Consider defining a more specific type for chartData
 }
 
-const ProjectionsContext = createContext<ProjectionsContextType | undefined>(undefined);
+const ProjectionsContext = createContext<ProjectionsContextType | undefined>(
+  undefined
+);
 
 export const ProjectionsProvider = ({ children }: { children: ReactNode }) => {
   const { accounts } = useAccountContext();
@@ -35,15 +43,26 @@ export const ProjectionsProvider = ({ children }: { children: ReactNode }) => {
     );
   }, [accounts, expenses, incomes, retirementAgeProjection]);
 
-  const yearArray = useMemo(() => chartData.map((year) => year.year), [chartData]);
+  const yearArray = useMemo(
+    () => chartData.map((year) => year.year),
+    [chartData]
+  );
 
   const initialMilestones: MilestoneType[] = [
-    { year: 2067, label: "Retirement Age", color: "orange", strokeColor: "white", radius: 12 },
-    { year: 2040, label: "Full Pension", color: "green", strokeColor: "white", radius: 8 },
+    {
+      year: 2067,
+      label: "Retirement Age",
+      color: "orange",
+      strokeColor: "white",
+      radius: 12,
+    },
   ];
 
-  const [milestones, setMilestones] = useState<MilestoneType[]>(initialMilestones);
-  const [yearDropdownItems, setYearDropdownItems] = useState<YearDropdownItem[]>([]);
+  const [milestones, setMilestones] =
+    useState<MilestoneType[]>(initialMilestones);
+  const [yearDropdownItems, setYearDropdownItems] = useState<
+    YearDropdownItem[]
+  >([]);
 
   useEffect(() => {
     const yearItems = yearArray.map((year) => ({
@@ -59,7 +78,9 @@ export const ProjectionsProvider = ({ children }: { children: ReactNode }) => {
       color: m.color,
     }));
 
-    setYearDropdownItems([...yearItems, ...milestoneItems].sort((a, b) => a.value - b.value));
+    setYearDropdownItems(
+      [...yearItems, ...milestoneItems].sort((a, b) => a.value - b.value)
+    );
   }, [yearArray, milestones]);
 
   const value = {
@@ -79,7 +100,9 @@ export const ProjectionsProvider = ({ children }: { children: ReactNode }) => {
 export const useProjectionsContext = () => {
   const context = useContext(ProjectionsContext);
   if (context === undefined) {
-    throw new Error("useProjectionsContext must be used within a ProjectionsProvider");
+    throw new Error(
+      "useProjectionsContext must be used within a ProjectionsProvider"
+    );
   }
   return context;
 };

@@ -23,15 +23,15 @@ interface ExpensesProviderProps {
 const initialExpenses: Expense[] = [
   {
     id: nanoid(),
-    name: "Groceries",
-    amount: 5000,
-    category: "Food",
+    name: "Living Expenses",
+    amount: 10000,
+    category: "Living Expenses",
     type: "Variable",
     accountId: undefined,
-    notes: "Weekly groceries",
+    notes: "Living Expenses",
     duration: {
       start: 2025,
-      end: 2029,
+      end: 2067,
     },
   },
 ];
