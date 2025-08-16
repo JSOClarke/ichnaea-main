@@ -12,7 +12,7 @@ export default function ProjectionsPlan() {
   const [yearBreakdown, setYearBreakdown] = useState<number>(
     chartData[0]?.year
   );
-
+  console.log("yearbreakdown", yearBreakdown);
   const yearArray = useMemo(
     () => chartData.map((year) => year.year),
     [chartData]
@@ -42,7 +42,7 @@ export default function ProjectionsPlan() {
             landmarkYears={milestones}
           />
         </div>
-        <div className=" sidebar flex-1  mb-8 p-4 overflow-y-auto">
+        <div className=" sidebar flex-1  mb-8 p-4 max-h-100 min-w-100 overflow-y-auto">
           <ProjectionBreakdown
             // startYear={startYear}
             year={yearBreakdown}

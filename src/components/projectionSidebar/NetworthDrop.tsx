@@ -6,6 +6,7 @@ interface NetworthDropProps {
 }
 
 export default function NetworthDrop({ yearData }: NetworthDropProps) {
+  console.log("Networth data:  ", yearData.chartAccounts);
   return (
     <div>
       <UniversalDropdown title="Networth NEW" defaultOpen={false}>

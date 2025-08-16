@@ -115,13 +115,15 @@ function allocateFundsByPriority(
     });
   }
 
-  if (overflowAccount && remainingCash > 0) {
+  // Always add overflow account, even with 0 funding
+  if (overflowAccount) {
+    const remainingForOverflow = Math.max(0, remainingCash);
     results.push({
       accountId: overflowAccount.id,
       accountName: overflowAccount.name,
-      actualMonthlyContribution: remainingCash / 12,
-      annualFundedAmount: remainingCash,
-      fundingPercent: 1,
+      actualMonthlyContribution: remainingForOverflow / 12,
+      annualFundedAmount: remainingForOverflow,
+      fundingPercent: remainingForOverflow > 0 ? 1 : 0,
       original: overflowAccount,
     });
   }
