@@ -29,7 +29,8 @@ export const ProjectionsProvider = ({ children }: { children: ReactNode }) => {
   const { incomes } = useIncomeContext();
 
   const [userYOB] = useState<number>(2000);
-  const retirementAge = 67;
+  const retirementAge = 85;
+  const deathAge = 85;
   const currentYear = 2025;
   const retirementAgeProjection = userYOB + retirementAge - currentYear;
 
@@ -53,6 +54,13 @@ export const ProjectionsProvider = ({ children }: { children: ReactNode }) => {
       year: 2067,
       label: "Retirement Age",
       color: "orange",
+      strokeColor: "white",
+      radius: 12,
+    },
+    {
+      year: 2085,
+      label: "Death Age",
+      color: "black",
       strokeColor: "white",
       radius: 12,
     },
