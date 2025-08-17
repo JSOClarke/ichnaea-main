@@ -1,13 +1,13 @@
 import { Sankey, Tooltip } from "recharts";
 import { useProjectionsContext } from "../../ProjectionsContext";
-import { useState } from "react";
+// import { useState } from "react";
 import type { ChartData } from "../../../types/types";
 // import { SankeyData } from "./SankeyData";
 
 export default function UniversalSankeyDiagram() {
   const { chartData } = useProjectionsContext();
 
-  const [selectedYear, setSelectedYear] = useState();
+  // const [selectedYear, setSelectedYear] = useState();
 
   function findYearData(year: number) {
     if (chartData) {
@@ -17,7 +17,7 @@ export default function UniversalSankeyDiagram() {
 
   const rawData: ChartData = findYearData(2026);
   const expenses = rawData.totalExpenses;
-  const excessCash = rawData.totalIncome - rawData.totalExpenses;
+  // const excessCash = rawData.totalIncome - rawData.totalExpenses;
   const funding = rawData.chartAccounts.reduce((curr, acc) => {
     return curr + acc.fundedAnnualContribution;
   }, 0);

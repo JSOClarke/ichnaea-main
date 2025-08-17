@@ -30,7 +30,6 @@ export const ProjectionsProvider = ({ children }: { children: ReactNode }) => {
 
   const [userYOB] = useState<number>(2000);
   const retirementAge = 85;
-  const deathAge = 85;
   const currentYear = 2025;
   const retirementAgeProjection = userYOB + retirementAge - currentYear;
 

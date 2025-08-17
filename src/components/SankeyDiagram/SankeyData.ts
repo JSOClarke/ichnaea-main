@@ -1,6 +1,4 @@
-import { useProjectionsContext } from "../../ProjectionsContext";
-
-const { chartData } = useProjectionsContext();
+// import { useProjectionsContext } from "../../ProjectionsContext";
 
 export const SankeyData = {
   nodes: [

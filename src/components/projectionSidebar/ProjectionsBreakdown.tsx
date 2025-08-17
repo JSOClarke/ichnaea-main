@@ -13,13 +13,11 @@ import ActualFundingDropdown from "./ActualFundingDropdown";
 interface ProjectionBreakdownProps {
   year: number;
   chartData: ChartData[];
-  setYearBreakdown: (year: number) => void;
 }
 
 export default function ProjectionBreakdown({
   year,
   chartData,
-  setYearBreakdown,
 }: ProjectionBreakdownProps) {
   const { expenses } = useExpensesContext(); // get expenses from context
   const { incomes } = useIncomeContext(); // get incomes from context

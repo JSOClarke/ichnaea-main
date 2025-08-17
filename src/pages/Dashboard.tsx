@@ -1,10 +1,10 @@
-import NetWorthWidget from "../components/dashboard/NetWorthWidget";
-import AssetsWidget from "../components/dashboard/AssetsWidget";
-import UniversalWidget from "../components/dashboard/UniversalWidget";
+// import NetWorthWidget from "../components/dashboard/NetWorthWidget";
+// import AssetsWidget from "../components/dashboard/AssetsWidget";
+// import UniversalWidget from "../components/dashboard/UniversalWidget";
 import IncomeWidget from "../components/dashboard/IncomeWidget";
 import AccountWidget from "../components/dashboard/AccountWidget";
 import ExpensesWidget from "../components/dashboard/ExpensesWidget";
-import UniversalPieChart from "../components/UniversalPieChart";
+// import UniversalPieChart from "../components/UniversalPieChart";
 import UniversalSankeyDiagram from "../components/SankeyDiagram/UniversalSankeyDiagram";
 export default function Dashboard() {
   return (

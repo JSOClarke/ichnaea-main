@@ -51,11 +51,7 @@ export default function ProjectionsPlan() {
               />
             </div>
             <div className="flex-1 overflow-y-auto">
-              <ProjectionBreakdown
-                year={yearBreakdown}
-                chartData={chartData}
-                setYearBreakdown={setYearBreakdown}
-              />
+              <ProjectionBreakdown year={yearBreakdown} chartData={chartData} />
             </div>
           </div>
         </div>
