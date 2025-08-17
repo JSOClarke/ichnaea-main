@@ -32,7 +32,7 @@ export default function TopBarRibbon({
   };
 
   return (
-    <div className="flex flex-col md:flex-row items-center gap-4 p-4 bg-gray-50 border-b border-gray-200">
+    <div className="flex flex-col md:flex-row items-center gap-4 p-4 bg-white md:h-20 rounded-xl">
       <div className="flex items-center gap-2">
         <label className="text-sm font-medium text-gray-700">Type:</label>
         <select

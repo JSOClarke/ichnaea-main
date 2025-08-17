@@ -47,7 +47,7 @@ export default function Milestone({
             type="text"
             value={milestoneTitle}
             placeholder="e.g., Retirement"
-            className="px-3 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-full md:w-32"
+            className="px-3 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-full md:w-40"
             onChange={(e) => setMilestoneTitle(e.target.value)}
           />
         </div>

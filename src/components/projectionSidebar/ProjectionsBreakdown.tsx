@@ -44,7 +44,7 @@ export default function ProjectionBreakdown({
 
   return (
     <div className="flex flex-col">
-      {/* Year Selector Header */}
+      {/* Year Selector Header
       <div className="mb-6">
         <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
           <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -66,8 +66,7 @@ export default function ProjectionBreakdown({
             })}
           </select>
         </div>
-      </div>
-
+      </div> */}
       {/* Breakdown Content */}
       <div className="flex-1 space-y-3">
         {filtered ? (
