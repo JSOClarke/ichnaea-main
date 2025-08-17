@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { nanoid } from "nanoid";
-import { Plus, Trash2 } from "lucide-react";
+import { Plus } from "lucide-react";
 import type { Account, Expense, Income } from "../../types/types";
 import { useAccountContext } from "../AccountsContext";
 import { useExpensesContext } from "../ExpensesContext";
@@ -173,9 +173,9 @@ export default function BottomBar() {
   };
 
   return (
-    <div className="flex w-full h-full p-4 space-x-8">
+    <div className="flex flex-col md:flex-row gap-2 md:gap-0 w-full h-full p-4 space-x-8">
       {/* Income Section */}
-      <div className="income-container flex-1">
+      <div className="income-container flex-1 w-full">
         <div className="container-title flex items-center justify-center text-xl text-white p-4 bg-[#30499f] rounded-t-lg border-b">
           Income
         </div>
@@ -199,7 +199,7 @@ export default function BottomBar() {
       </div>
 
       {/* Savings/Accounts Section */}
-      <div className="savings-container flex-1">
+      <div className="savings-container flex-1 w-full">
         <div className="container-title flex items-center justify-center text-xl p-4 text-white p-4 bg-[#30499f] rounded-t-lg border-b">
           Savings & Investments
         </div>
@@ -223,7 +223,7 @@ export default function BottomBar() {
       </div>
 
       {/* Expenses Section */}
-      <div className="expenses-container flex-1">
+      <div className="expenses-container flex-1 w-full">
         <div className="container-title flex items-center justify-center text-xl p-4 text-white  bg-[#30499f] rounded-t-lg border-b">
           Expenses
         </div>

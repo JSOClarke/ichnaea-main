@@ -30,7 +30,7 @@ function calculateCompoundInterestWithContributions(
   return principalFV + contributionsFV;
 }
 
-function calculatePassiveIncomeOnly(
+export function calculatePassiveIncomeOnly(
   principal: number,
   monthlyContribution: number,
   annualRate: number,

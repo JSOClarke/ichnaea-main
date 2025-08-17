@@ -13,28 +13,27 @@ function App() {
   return (
     <>
       <BrowserRouter>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            height: "100vh",
-            width: "100vw",
-          }}
-        >
+        <div className="grid grid-rows-[auto_1fr] md:grid-rows-1 md:grid-cols-[auto_1fr] h-screen w-screen">
           <AppSidebar />
-          <IncomeProvider>
-            <ExpensesProvider>
-              <AccountProvider>
-                <ProjectionsProvider>
-                  <Routes>
-                    <Route path="/" element={<Dashboard />} />
-                    <Route path="/projections" element={<ProjectionsPlan />} />
-                    <Route path="/accounts" element={<Accounts />} />
-                  </Routes>
-                </ProjectionsProvider>
-              </AccountProvider>
-            </ExpensesProvider>
-          </IncomeProvider>
+          <div className="overflow-auto">
+            {/* Main content */}
+            <IncomeProvider>
+              <ExpensesProvider>
+                <AccountProvider>
+                  <ProjectionsProvider>
+                    <Routes>
+                      <Route path="/" element={<Dashboard />} />
+                      <Route
+                        path="/projections"
+                        element={<ProjectionsPlan />}
+                      />
+                      <Route path="/accounts" element={<Accounts />} />
+                    </Routes>
+                  </ProjectionsProvider>
+                </AccountProvider>
+              </ExpensesProvider>
+            </IncomeProvider>
+          </div>
         </div>
       </BrowserRouter>
     </>

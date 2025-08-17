@@ -365,7 +365,6 @@ export default function EditModal({
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Start Year
                 </label>
-                .
                 <select
                   value={formData.duration?.start || new Date().getFullYear()}
                   onChange={(e) =>

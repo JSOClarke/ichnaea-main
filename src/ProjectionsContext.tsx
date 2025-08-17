@@ -3,7 +3,7 @@ import React, {
   useState,
   useMemo,
   useContext,
-  ReactNode,
+  type ReactNode,
   useEffect,
 } from "react";
 import type { MilestoneType, YearDropdownItem } from "../types/types";

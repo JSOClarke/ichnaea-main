@@ -1,4 +1,3 @@
-import type { Account } from "../../../types/types";
 import { useAccountContext } from "../../AccountsContext";
 
 export default function NetWorthWidget() {

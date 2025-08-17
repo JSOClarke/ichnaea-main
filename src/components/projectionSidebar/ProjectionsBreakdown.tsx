@@ -6,12 +6,9 @@ import ExpensesDropDown from "./ExpensesDropDown";
 import IncomeDropdown from "./IncomeDropdown";
 // import PassiveIncomeDropdown from "./PassiveIncomeDropdown";
 // import PassiveIncomeChangeDropdown from "./PassiveIncomeChangeDropdown";
-import { useAccountContext } from "../../AccountsContext";
 import { useIncomeContext } from "../../IncomeContext";
 import ExcessDropdown from "./ExcessDropdown";
 import ActualFundingDropdown from "./ActualFundingDropdown";
-import NetworthDrop from "./NetworthDrop";
-import { toAnnualAmount } from "../../utils/projectionsHelpers";
 
 interface ProjectionBreakdownProps {
   year: number;
@@ -25,16 +22,9 @@ export default function ProjectionBreakdown({
   setYearBreakdown,
 }: ProjectionBreakdownProps) {
   const { expenses } = useExpensesContext(); // get expenses from context
-  const { accounts } = useAccountContext(); // get accounts from context
   const { incomes } = useIncomeContext(); // get incomes from context
 
   const filtered = chartData.find((yearData) => yearData.year === year);
-  const totalIncomeAmountFiltered = filtered?.totalAccountAmount ?? 0;
-
-  // Calculate total expenses for the year (converted to annual)
-  const totalExpensesAmountFiltered = expenses
-    .filter((e) => e.duration.start <= year && e.duration.end >= year)
-    .reduce((sum, e) => sum + toAnnualAmount(e.amount, e.frequency), 0);
 
   function findPreviousYearData(year: number) {
     if (year == 2025) {
@@ -50,8 +40,10 @@ export default function ProjectionBreakdown({
     }
   }
 
+  const yearData = findYearData(year);
+
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col">
       {/* Year Selector Header */}
       <div className="mb-6">
         <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
@@ -88,8 +80,8 @@ export default function ProjectionBreakdown({
             />
             <IncomeDropdown incomes={incomes} year={year} />
             <ExpensesDropDown expenses={expenses} year={year} />
-            <ExcessDropdown yearData={findYearData(year)} />
-            <ActualFundingDropdown yearData={findYearData(year)} />
+            {yearData && <ExcessDropdown yearData={yearData} />}
+            {yearData && <ActualFundingDropdown yearData={yearData} />}
           </>
         ) : (
           <div className="flex items-center justify-center p-8 text-gray-500 bg-gray-50 rounded-lg border border-gray-200">

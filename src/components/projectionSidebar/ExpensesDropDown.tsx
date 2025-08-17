@@ -35,7 +35,7 @@ export default function ExpensesDropDown({
           );
           return (
             <DropdownItem
-              key={expense.id}
+              key={idx}
               label={expense.name}
               value={`£${annualAmount.toLocaleString()}`}
             />

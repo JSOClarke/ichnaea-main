@@ -32,7 +32,7 @@ export default function TopBarRibbon({
   };
 
   return (
-    <div className="flex items-center gap-4 p-4 bg-gray-50 border-b border-gray-200">
+    <div className="flex flex-col md:flex-row items-center gap-4 p-4 bg-gray-50 border-b border-gray-200">
       <div className="flex items-center gap-2">
         <label className="text-sm font-medium text-gray-700">Type:</label>
         <select
@@ -52,7 +52,7 @@ export default function TopBarRibbon({
         </select>
       </div>
 
-      <div className="flex-1 min-w-0 h-10 flex items-center">
+      <div className="flex-1 min-w-0 flex items-center">
         {milestoneSelected === "yearMilestone" && (
           <Milestone
             yearArray={yearArray}

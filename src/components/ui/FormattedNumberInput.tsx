@@ -14,7 +14,6 @@ export default function FormattedNumberInput({
   onChange,
   placeholder,
   className = "",
-  step = "0.01",
   required = false,
 }: FormattedNumberInputProps) {
   const [displayValue, setDisplayValue] = useState("");

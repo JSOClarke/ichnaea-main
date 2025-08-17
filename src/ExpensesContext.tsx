@@ -1,4 +1,9 @@
-import React, { createContext, useState, ReactNode, useContext } from "react";
+import React, {
+  createContext,
+  useState,
+  type ReactNode,
+  useContext,
+} from "react";
 import type { Expense } from "../types/types";
 import { nanoid } from "nanoid";
 

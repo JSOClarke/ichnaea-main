@@ -1,40 +1,44 @@
-import { Home, Wallet, Telescope, Infinity } from "lucide-react";
+import { Home, Wallet, Telescope, Infinity, Menu, X } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useState } from "react";
 
-interface AppSidebarProps {}
+export default function AppSidebar() {
+  const [isOpen, setIsOpen] = useState(false);
 
-export default function AppSidebar({}) {
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
+
   return (
-    <div className="flex bg-[#30499f] text-white items-center justify-between  p-2">
-      <div className="app-sidebar-container flex items-center justify-center">
-        <div className=" flex flex-col items-center">
+    <div className="bg-[#30499f] text-white md:w-64 md:min-h-screen p-4 flex flex-col">
+      <div className="flex items-center justify-between md:flex-col md:items-center">
+        <div className="flex flex-col items-center">
           <Infinity />
           Ichnaea
         </div>
-        {/* <h2 className=" flex items-center text-[#e27a6d] font-bold "></h2> */}
+        <div className="md:hidden">
+          <button onClick={toggleMenu}>
+            {isOpen ? <X /> : <Menu />}
+          </button>
+        </div>
       </div>
       <nav
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          gap: "1rem",
-          paddingLeft: "1rem",
-        }}
+        className={`${
+          isOpen ? "flex" : "hidden"
+        } flex-col md:flex md:flex-col md:items-start md:gap-4 mt-4 md:mt-8`}
       >
-        <Link to="/" className="flex gap-2 ">
-          {/* <Home /> */}
+        <Link to="/" className="flex items-center gap-2 py-2">
+          <Home />
           Dashboard
         </Link>
-        <Link to="/accounts" className="flex gap-2">
-          {/* <Wallet /> */}
+        <Link to="/accounts" className="flex items-center gap-2 py-2">
+          <Wallet />
           Accounts
         </Link>
-        <Link to="/projections" className="flex gap-2">
-          {/* <Telescope /> */}
+        <Link to="/projections" className="flex items-center gap-2 py-2">
+          <Telescope />
           Projections
         </Link>
-
-        {/* Add more links as needed */}
       </nav>
     </div>
   );
